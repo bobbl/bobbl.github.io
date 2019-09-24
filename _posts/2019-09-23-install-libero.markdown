@@ -8,7 +8,7 @@ categories: FPGA microsemi
 
 This is how I installed Libero SoC v12.1 on Ubuntu 18.04 LTS (Bionic Beaver).
 What helped me a lot where the instructions to install Libero on
-[Ubuntu](http://www.fabienm.eu/flf/installing-libero-on-debian-9)
+[Debian](http://www.fabienm.eu/flf/installing-libero-on-debian-9)
 and [Arch Linux](https://wiki.archlinux.org/index.php/Microsemi_Libero)
 
 
