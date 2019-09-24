@@ -7,7 +7,9 @@ categories: FPGA microsemi
 
 
 This is how I installed Libero SoC v12.1 on Ubuntu 18.04 LTS (Bionic Beaver).
-
+What helped me a lot where the instructions to install Libero on
+[Ubuntu](http://www.fabienm.eu/flf/installing-libero-on-debian-9)
+and [Arch Linux](https://wiki.archlinux.org/index.php/Microsemi_Libero)
 
 
 Get License
@@ -86,7 +88,7 @@ Install dependencies:
     sudo apt install libmotif-dev libglib2.0-0:i386 libfreetype6:i386 \
         libsm6:i386 libfontconfig1:i386 libpulse0:i386 libqt5gui5:i386
 
-libpng12-0 must be install manually (source: <https://www.linuxuprising.com/2018/05/fix-libpng12-0-missing-in-ubuntu-1804.html>).
+libpng12-0 must be installed manually (source: <https://www.linuxuprising.com/2018/05/fix-libpng12-0-missing-in-ubuntu-1804.html>).
 Both the 32 bit version (for Libero itself) and the 64 bit version (for the chip planner) are required.
 
     wget http://security.ubuntu.com/ubuntu/pool/main/libp/libpng/libpng12-0_1.2.54-1ubuntu1.1_i386.deb
