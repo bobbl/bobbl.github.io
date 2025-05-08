@@ -72,8 +72,8 @@ suitable CD release.
 Since gnudb contains 5 times as many disc IDs than MusicBrainz, it is likely
 that the CD is in gnudb. Whipper has no automatic fall back to gnudb metadata
 if MusicBrainz metadata is not available. Therefore I wrote a 
-[script](https://github.com/bobbl/sammelsurium/seed_mb_from_gnudb/) for it.
-It can be found in github.
+[script](https://github.com/bobbl/sammelsurium/tree/master/seed_mb_from_gnudb/)
+for it. It can be found in github.
 When you run the script while the CD is in your drive, it computes the disc
 IDs and queries gnudb for the track list. The received data is written to a HTML
 file. The name of the HTML file is `seed_FOO.html` where FOO is the title of
@@ -126,7 +126,7 @@ Sorry, I can't help. You have to enter everything by hand.
   * Copy MusicBrainz lookup URL to web browser
   * Search on MusicBrainz for artist and release
   * If found -> attach disc ID to release and run whipper afterwards
-  * Run `seed_mb_from_gnudb.py`
+  * Run [`seed_mb_from_gnudb.py`](https://github.com/bobbl/sammelsurium/tree/master/seed_mb_from_gnudb/)
   * If multiple disc set, run with argument `-m` and change CD when prompted
   * If not found in gnudb -> enter release by hand
   * Open generated HTML file in browser
