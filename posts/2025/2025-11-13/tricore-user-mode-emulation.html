@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed bobbl.github.io" href="../../../rss.xml" />
+-->
+    <link rel="stylesheet" href="../../../style/blog.css">
+    <title>User-mode emulation for TriCore with TSIM and the GNU toolchain</title>
+  </head>
+  <body>
+    <header style="background:#fefbd8;">
+      <div class="maxwidth" style="padding: 10pt;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <a style="text-decoration:none; color:black; font-weight:normal; font-size:30pt; font-family:Arial,Helvetica,sans-serif;"
+              href="../../../index.html">
+            bob]<b>bl</b>[og
+          </a>
+          <div>
+            joerg.mische@gmail.com
+          </div>
+          <div>
+            <a href="../../../static/about.html">about</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <br>
+      <div class="maxwidth">
+
+<h1>User-mode emulation for TriCore with TSIM and the GNU toolchain</h1>
+<p>QEMU User-mode Emulation is a practical solution for testing
+algorithms directly without having to set up a microcontroller system
+and boot it every time you test. Unfortunately, <a
+href="https://www.qemu.org/">QEMU</a> only supports full system
+emulation of Aurix microcontrollers with TriCore instruction set.
+User-mode emulation is not available for TriCore.</p>
+<p>Since Infineon’s Tricore instruction set simulator <a
+href="https://softwaretools.infineon.com/tools/com.ifx.tb.tool.tsimtricoreinstructionsetsimulator">TSIM</a>
+has a virtual I/O feature that can be used for user-mode emulation.</p>
+<h2 id="compile-for-tricore-and-tsim">Compile for Tricore and TSIM</h2>
+<p>Download and install the <a
+href="https://nomore201.github.io/tricore-gcc-toolchain/">Tricore GNU
+toolchain</a> (including GCC, binutils, GDB and newlib) with</p>
+<pre><code>git clone --recursive https://github.com/NoMore201/tricore-gcc-toolchain
+cd tricore-gcc-toolchain
+mkdir build
+cd build
+../configure --prefix=~/.local/share/tricore-gcc
+make -j$(nproc) stamps/build-gcc-stage</code></pre>
+<p>or directly use the less experimental upstream repository from <a
+href="https://github.com/EEESlab">EEESlab</a></p>
+<pre><code>git clone --recursive git@github.com:EEESlab/tricore-gcc-toolchain-11.3.0.git
+./build-toolchain --all</code></pre>
+<p>Compile <code>foo.c</code> to <code>foo.elf</code> with</p>
+<pre><code>tricore-elf-gcc -mcpu=tc39xx -g -nostartfiles -T tsim.ld tsim_startup.c \
+    -o foo.elf&quot; foo.c</code></pre>
+<p>Two additional files cannot be avoided: the internal linker script of
+gcc does not define memory regions and the internal startup code does
+access an invalid memory mapped register which causes an exception.</p>
+<h2 id="minimal-linker-script">Minimal Linker Script</h2>
+<p>The linker script starts with the declaration of the target
+architecture:</p>
+<pre><code>OUTPUT_FORMAT(&quot;elf32-tricore&quot;)
+OUTPUT_ARCH(tricore)</code></pre>
+<p>TSIM comes with config scripts for the Aurix TC39xx family of
+microcontrollers. We use two memory regions: 240 KiByte data scratchpad
+RAM at 0x70000000 and 4MiByte program flash ROM at 0x80000000:</p>
+<pre><code>MEMORY {
+    data_scratchpad_ram (w!xp): org = 0x70000000, len = 240k
+    program_flash_rom   (rx!p): org = 0x80000000, len = 4M
+}</code></pre>
+<p>Most sections are automatically assigned by the linker. Only the
+<code>.heap</code> section must be defined, because newlib expects the
+symbols <code>__HEAP</code> and <code>__HEAP_END</code> to point at the
+start and the end of the heap memory area.</p>
+<pre><code>HEAP_SIZE  = 64k;
+SECTIONS {
+    .heap  : FLAGS(aw) {
+        . = ALIGN(4);
+        __HEAP = .;
+        . += HEAP_SIZE;
+        __HEAP_END = .;
+    } &gt; data_scratchpad_ram
+}</code></pre>
+<p>Complete file: <a
+href="https://github.com/bobbl/sammelsurium/blob/master/tsim/tsim.ld">tsim.ld</a></p>
+<h2 id="minimal-startup-code">Minimal Startup Code</h2>
+<p>Program entry is at the <code>_start</code> function. At this point
+the stack is not initialised yet. Therefore the function is of pure
+assembly and only sets the stack pointer a10 to 0x7003A000 and jumps to
+the C code in <code>__startup</code>.</p>
+<pre><code>void _start( void ) __attribute__((used,noinline)) ;
+void _start(void)
+{
+    asm(&quot;movh.a   %a10, hi:(0x7003A000)           \n\t&quot; \
+        &quot;lea      %a10, [%a10]lo:(0x7003A000)     \n\t&quot; \
+        &quot;dsync                                    \n\t&quot; \
+        &quot;movh.a   %a15,  hi:(__startup)           \n\t&quot; \
+        &quot;lea      %a15, [%a15]lo:(__startup)      \n\t&quot; \
+        &quot;ji %a15&quot;);
+}</code></pre>
+<p>Main task of <code>__startup</code> is to create the singly linked
+list of CSAs. Each CSA is 64 bytes long and the first 4 byte word points
+to the next entry. Core register FCX points to the first free entry in
+the CSA list. LCX points to one of the last entries, but not the last.
+When FCX reaches LCX a trap is taken and there should be some CSA
+remaining for the execution of the trap. The pointers in FCX, LCX and
+the next field are not direct addresses, but compressed ones that can
+only address the first 4 MiByte of each segment.</p>
+<pre><code>void __startup() __attribute__((used,noinline,noreturn)) ;
+void __startup()
+{
+    /* Setup the context save area linked list. */
+    unsigned int csa_addr  = 0x7003A000;
+    unsigned int csa_end   = 0x7003C000;
+    unsigned int next_pcxi = ((csa_addr &amp; 0xF0000000) &gt;&gt; 12) | /* segment */
+                             ((csa_addr &amp; 0X003FFFC0) &gt;&gt; 6);   /* offset */
+
+    _mtcr(0xFE38/*FCX*/, next_pcxi); /* store 1st PCXI value in FCX */
+
+    while (csa_addr &lt; csa_end) {
+        next_pcxi++;
+        *(unsigned int *)csa_addr = next_pcxi;
+        csa_addr += 64;
+    }
+    *(unsigned int *)(csa_end - 64) = 0; /* mark end of CSA list */
+
+    _mtcr(0xFE3C/*LCX*/, next_pcxi - 3);
+    _dsync();
+
+    exit(main());
+}</code></pre>
+<p>Complete file: <a
+href="https://github.com/bobbl/sammelsurium/blob/master/tsim/tsim_startup.c">tsim_startup.c</a></p>
+<h2 id="run-with-tsim">Run with TSIM</h2>
+<p>After registration, TSIM can be downloaded from the <a
+href="https://softwaretools.infineon.com/tools/com.ifx.tb.tool.tsimtricoreinstructionsetsimulator">Infineon
+website</a>. Install with</p>
+<pre><code>sudo apt install ./tsim_1.18.196_linux_x64.deb</code></pre>
+<p>TSIM will be installed to a fixed path under
+<code>/opt/Tools/...</code>. Emulate <code>foo.elf</code> with</p>
+<pre><code>tsim_path=/opt/Tools/TSIM-Tricore-instruction-set-simulator/1.18.196
+${tsim_path}/bin/tsim16p_e -e -h -s -H -z \
+    -MConfig ${tsim_path}/config/tc162/tc39xx/MConfig \
+    -OConfig ${tsim_path}/config/tc162/tc39xx/OConfig \
+    -o foo.elf -trace-instr-file foo.tsim</code></pre>
+<h2 id="appendix-tsim-virtual-io-interface">Appendix: TSIM Virtual I/O
+Interface</h2>
+<p>A system call to the virtual I/O is done by the <code>debug</code>
+instruction. The parameters are passed in registers according to the
+Tricore calling convention. The syscall number is passed in register
+<code>D12</code>. After the syscall, <code>D11</code> is set to the
+return value and <code>D12</code> to <code>errno</code> if an error
+occured. The following syscall numbers are supported:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">no</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td><code>int open(char *filename, int flags, int mode)</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td><code>close(int fd)</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td><code>int lseek(int fd, int offset, int whence)</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td><code>int read(int fd, void *buf, int len)</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td><code>int write(int fd, void *buf, int len)</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">6</td>
+<td><code>int creat(char *filename, int mode)</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">7</td>
+<td><code>int unlink(char *filename)</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">8</td>
+<td><code>int stat(char *filename, void *statbuf)</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">9</td>
+<td><code>int fstat(int fd, void *statbuf)</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">10</td>
+<td><em>gettimeofday()</em> ?</td>
+</tr>
+<tr>
+<td style="text-align: right;">11</td>
+<td><code>int ftruncate(int fd, int len)</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">13</td>
+<td><code>int rename(char *oldname, char *newname)</code></td>
+</tr>
+</tbody>
+</table>
+<p class="lastmodified">2025-11-13</p>
+      </div>
+    </main>
+  </body>
+</html>

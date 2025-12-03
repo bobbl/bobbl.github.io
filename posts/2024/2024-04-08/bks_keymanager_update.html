@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed bobbl.github.io" href="../../../rss.xml" />
+-->
+    <link rel="stylesheet" href="../../../style/blog.css">
+    <title>BKS KeyManager Update von Version 4.x auf 7.x</title>
+  </head>
+  <body>
+    <header style="background:#fefbd8;">
+      <div class="maxwidth" style="padding: 10pt;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <a style="text-decoration:none; color:black; font-weight:normal; font-size:30pt; font-family:Arial,Helvetica,sans-serif;"
+              href="../../../index.html">
+            bob]<b>bl</b>[og
+          </a>
+          <div>
+            joerg.mische@gmail.com
+          </div>
+          <div>
+            <a href="../../../static/about.html">about</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <br>
+      <div class="maxwidth">
+
+<h1>BKS KeyManager Update von Version 4.x auf 7.x</h1>
+<div lang="de">
+<p>Schließberechtigungen für die elektrische Schließanlage BKS ixalo SE
+werden mit Hilfe des <a
+href="https://www.g-u.com/de/DE/produkte/tuertechnik/schliessanlagen/elektronische-schliesssysteme.html">BKS
+KeyManagers</a> verwaltet. Bei der Installation unserer Schließanlage
+wurde Version 4.4.0007 (06/2017) des KeyManagers mitgeliefert. Das
+Update auf die aktuelle Version 7.4 ist nicht ganz trivial, deshalb hier
+eine kurze Anleitung.</p>
+<h2 id="zwischenupdate-auf-version-4.4.0015">Zwischenupdate auf Version
+4.4.0015</h2>
+<p>Zuerst muss die alte Version des BKS KeyManagers auf Version 4.4.0015
+gebracht werden. Das ist einfach:</p>
+<ul>
+<li>Das Update von <a
+href="https://www.g-u.com/fileadmin/user_upload/Key_Manager/KM_4.4.0015.zip"
+class="uri">https://www.g-u.com/fileadmin/user_upload/Key_Manager/KM_4.4.0015.zip</a>
+herunterladen</li>
+<li>ZIP-Datei entpacken</li>
+<li>Installation mit <code>setup.exe</code> starten</li>
+</ul>
+<p>Nach Abschluss der Installation kann der KeyManager wie gewohnt
+gestartet werden. Die Passwörter sind unverändert und alle Daten der
+Schließanlage werden automatisch übernommen.</p>
+<h2 id="datensicherung-durchführen">Datensicherung durchführen</h2>
+<p>Mit dieser Version kann eine Datensicherung durchgeführt werden, die
+dann von Version 7.x importiert werden kann:</p>
+<ul>
+<li>KeyManager starten und Passwort angeben</li>
+<li>Menüpunkt <code>Datei &gt; Datensicherung durchführen...</code>
+auswählen</li>
+<li>Speicherort für die Datensicherung auswählen, z.B.
+<code>Dokumente &gt; bks44sicherung.fbk</code></li>
+<li>KeyManager beenden</li>
+</ul>
+<h2 id="update-auf-version-7.4.0000-022024">Update auf Version 7.4.0000
+(02/2024)</h2>
+<ul>
+<li>Auf der <a
+href="https://www.g-u.com/de/DE/service/service-mit-system/service-fuer-hersteller-und-bauausfuehrende/keymanager.html">BKS
+KeyManager Homepage der GU-Gruppe</a> das <strong>Update</strong> auf
+die neueste Version des KeyManagers herunterladen. Bei mir war das <a
+href="https://www.g-u.com/fileadmin/user_upload/Key_Manager/UPD_KM_7.4.0000_x64.exe"
+class="uri">https://www.g-u.com/fileadmin/user_upload/Key_Manager/UPD_KM_7.4.0000_x64.exe</a>.</li>
+<li>ZIP-Datei entpacken</li>
+<li>Installation mit <code>setup.exe</code> starten</li>
+</ul>
+<p>Bei diesem Update werden allerdings die Daten der Schließanlage nicht
+automatisch übernommen. Dafür ist noch ein weiterer Schritt nötig:</p>
+<h2 id="datensicherung-einspielen">Datensicherung einspielen</h2>
+<p>Weder Schließanlagendaten noch Passwörter werden durch das Update
+übernommen. Deshalb muss zunächst das voreingestellte Passwort verwendet
+werden:</p>
+<ul>
+<li>KeyManger (x64) starten</li>
+<li>Benutzer <code>BKS</code> und Passwort <code>Admin</code>
+angeben</li>
+<li>Das Programm behauptet zwar, jetzt die Datenbank zu importieren und
+verlangt auch noch ein zweites Mal das Passwort, das passiert aber
+nicht.</li>
+<li>Stattdessen öffnet sich ein Fenster worin gefragt wird, ob eine neue
+Datenbank angelegt werden soll. Dieses Fenster schließen.</li>
+<li>Menüpunkt <code>Datei &gt; DatenRÜCKsicherung durchführen...</code>
+anklicken</li>
+<li>Die zuvor gemachte Datensicherungsdatei auswählen, bei mir
+<code>Dokumente &gt; bks44sicherung.fbk</code></li>
+<li>Jetzt wird ein Passwort verlangt. Der Benutzer ist wieder
+<code>BKS</code>, diesmal muss jedoch das alte Passwort von der alten
+Installation verwendet werden. Auch wieder zweimal.</li>
+</ul>
+<p>Damit ist das Update abgeschlossen, alle Daten wurden importiert und
+der KeyManager kann wie gewohnt verwendet werden.</p>
+</div>
+<p class="lastmodified">2024-04-09</p>
+      </div>
+    </main>
+  </body>
+</html>

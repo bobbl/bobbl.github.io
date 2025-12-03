@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed bobbl.github.io" href="../../../rss.xml" />
+-->
+    <link rel="stylesheet" href="../../../style/blog.css">
+    <title>Install Microsemi Libero 2021.1 on Ubuntu 20.04</title>
+  </head>
+  <body>
+    <header style="background:#fefbd8;">
+      <div class="maxwidth" style="padding: 10pt;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <a style="text-decoration:none; color:black; font-weight:normal; font-size:30pt; font-family:Arial,Helvetica,sans-serif;"
+              href="../../../index.html">
+            bob]<b>bl</b>[og
+          </a>
+          <div>
+            joerg.mische@gmail.com
+          </div>
+          <div>
+            <a href="../../../static/about.html">about</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <br>
+      <div class="maxwidth">
+
+<h1>Install Microsemi Libero 2021.1 on Ubuntu 20.04</h1>
+<p>This is how I installed Libero SoC v2021.1 on Ubuntu 20.04 LTS (Focal
+Fossa). It is an update of <a
+href="%7B%%20post_url%202019-09-23-install-libero%20%%7D">my previous
+post</a>.</p>
+<h2 id="get-license">Get License</h2>
+<p>Create a directory for the license server (here I use
+<code>~/.local/share/microsemi/license</code>)</p>
+<pre><code>mkdir --p /home/USERNAME/.local/share/microsemi/license</code></pre>
+<p>Download the “Linux Daemon” from <a
+href="https://www.microsemi.com/product-directory/design-resources/1711-licensing#downloads"
+class="uri">https://www.microsemi.com/product-directory/design-resources/1711-licensing#downloads</a>
+to the license directory and extract it with</p>
+<pre><code>tar xf Linux_Licensing_Daemon.tar.Z</code></pre>
+<p>Create an account on <a href="https://www.microsemi.com"
+class="uri">https://www.microsemi.com</a> and request a “Libero Silver
+1Yr Floating License for Windows/Linux Server”. You have to enter your
+MAC address (12 hexadecimal digits without colons), which you can get by
+typing</p>
+<pre><code>ip link | grep ether</code></pre>
+<p>The license file is sent via email. Store the license file
+<code>License.dat</code> in the license directory.</p>
+<p>Now the first four lines of the license file must be edited, but
+<em>not the rest of the file</em>. In the first line, replace
+<code>&lt;put.hostname.here&gt;</code> by <code>localhost</code>. In
+lines 2 to 4 replace <code>PATH</code> by the absolute path to the
+license daemon directory. The first 4 lines schould then look like
+that:</p>
+<pre><code>SERVER localhost 112233445566 1702
+DAEMON actlmgrd /home/USERNAME/.local/share/microsemi/license/Linux_Licensing_Daemon/actlmgrd
+DAEMON mgcld /home/USERNAME/.local/share/microsemi/license/Linux_Licensing_Daemon/mgcld
+VENDOR snpslmd /home/USERNAME/.local/share/microsemi/license/Linux_Licensing_Daemon/snpslmd</code></pre>
+<p>The license manager requires that <code>/usr/tmp</code> exists
+(otherwise you get “FlexNet Licensing error:-25,234”)</p>
+<pre><code>sudo ln -s /tmp /usr/tmp</code></pre>
+<p>Install the depedencies</p>
+<pre><code>sudo apt install lsb</code></pre>
+<p>And start the license server with</p>
+<pre><code>Linux_Licensing_Daemon/lmgrd -c License.dat -log /tmp/lmgrd.log</code></pre>
+<p>If you get a “file not found” error, install lsb.</p>
+<p>On my system I have the problem that the license works only for a few
+minutes. I don’t know why, but when I start Libero a second time after a
+few minutes, it doesn’t recognise the license. Stopping and restarting
+the license server helps:</p>
+<pre><code>Linux_Licensing_Daemon/lmdown -c License.dat -q
+Linux_Licensing_Daemon/lmgrd -c License.dat -log /tmp/lmgrd.log</code></pre>
+<h2 id="install-libero">Install Libero</h2>
+<p>Download “Libero SoC v2021.1 for Linux” from <a
+href="https://www.microsemi.com/product-directory/design-resources/1750-libero-soc#downloads"
+class="uri">https://www.microsemi.com/product-directory/design-resources/1750-libero-soc#downloads</a>.</p>
+<p>The downloaded binary is a self-extracting archive built with
+InstallAnywhere. Before executing it, set its execute bit must be set
+and some dependencies have to be installed:</p>
+<pre><code>sudo apt install libxtst6:i386 libxrender1:i386 apt-file
+chmod +x Libero_SoC_v2021.1_lin.bin
+./Libero_SoC_v2021.1_lin.bin</code></pre>
+<p>Now the graphical installer should be launched. If not, there are
+still some library dependencies unresolved. From my experience, the
+console mode installation does not work at all. Quit it by typing
+<code>quit</code> and try to install additional X or Qt libraries until
+the graphical installer is started.</p>
+<p>Within the graphical installer, I recommend to change the install
+path to
+<code>/home/USERNAME/.local/share/microsemi/Libero_SoC-v12.1</code> and
+the common directory to
+<code>/home/USERNAME/.local/share/microsemi/common</code>. Otherwise you
+need root permissions whenever Libero updates the IP cores.</p>
+<p>The graphical installer checks for dependencies and suggests a
+command line to install them. Copy this line to a terminal and prepend
+it with <code>sudo</code>. When I tired it, it was</p>
+<pre><code>sudo apt-get install -y xfonts-intl-asian xfonts-intl-chinese \
+    xfonts-intl-chinese-big xfonts-intl-japanese xfonts-intl-japanese-big \
+    ksh libxft2:i386 libgtk2.0-0:i386 libcanberra-gtk-module:i386 \
+    packagekit-gtk3-module:i386</code></pre>
+<p>If <code>apt-get</code> complains that a package is not available,
+simply remove it and try again (I had to remove
+<code>packagekit-gtk3-module:i386</code>).</p>
+<p>Before actually starting Libero, some environment variables have to
+be set:</p>
+<pre><code>export LM_LICENSE_FILE=1702@localhost
+export SNPSLMD_LICENSE_FILE=1702@localhost
+export LD_LIBRARY_PATH=/usr/lib/i386-linux-gnu/:/usr/lib/x86_64-linux-gnu/:/usr/lib
+/home/USERNAME/.local/share/microsemi/Libero/bin/libero</code></pre>
+<p class="lastmodified">2021-05-01</p>
+      </div>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed bobbl.github.io" href="../../../rss.xml" />
+-->
+    <link rel="stylesheet" href="../../../style/blog.css">
+    <title>Contribute to MusicBrainz when ripping CDs with support of gnudb/FreeDB</title>
+  </head>
+  <body>
+    <header style="background:#fefbd8;">
+      <div class="maxwidth" style="padding: 10pt;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <a style="text-decoration:none; color:black; font-weight:normal; font-size:30pt; font-family:Arial,Helvetica,sans-serif;"
+              href="../../../index.html">
+            bob]<b>bl</b>[og
+          </a>
+          <div>
+            joerg.mische@gmail.com
+          </div>
+          <div>
+            <a href="../../../static/about.html">about</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <br>
+      <div class="maxwidth">
+
+<h1>Contribute to MusicBrainz when ripping CDs with support of gnudb/FreeDB</h1>
+<p>I rip my CD collection with <a
+href="https://github.com/whipper-team/whipper/">whipper</a>. However,
+most of this guide also applies to other ripping programs.</p>
+<p>I am using whipper, because it is a command line tool, supports bit
+accurate ripping with <a
+href="https://www.accuraterip.com/">AccurateRip</a> and lossless
+encoding with <a href="https://xiph.org/flac/">FLAC</a>. The track
+titles are retrieved from <a
+href="https://www.musicbrainz.com/">MusicBrainz</a>, which currently
+provides the highest quality meta data due to its strict review
+process.</p>
+<p>However, as of 2025 MusicBrainz comprises only 1.1 million disc IDs,
+whereas the <a href="https://gnudb.org/">Global Network Universal
+Database (gnudb)</a> comprises 5.5 million disc IDs. Gnudb is the
+successor of FreeDB which was shutdown in 2020, which is the successor
+of the first database for track listings, the Compact Disc Database
+(CDDB) from 1994. Due to its long history it contains nearly every
+available CD, but also lots of duplicates and inconsistencies.</p>
+<p>Whipper and other ripping programs decided to use the higher quality
+data of MusicBrainz and encourage users to grow the MusicBrainz database
+by submitting missing CD releases. In this article I provide some help
+to do so. There are 4 cases:</p>
+<ol type="1">
+<li>MusicBrainz entry with disc ID exists (90% of my CD collection)</li>
+<li>MusicBrainz entry without disc ID (6%)</li>
+<li>Not in MusicBrainz, but in gnudb (3.5%)</li>
+<li>CD is not in any database (0.5%</li>
+</ol>
+<p>The next sections describe, how to deal with these cases. My main
+contribution is a script to make case 3 much easier.</p>
+<h2 id="automatic-disc-id-found-in-musicbrainz">1. Automatic: Disc ID
+found in MusicBrainz</h2>
+<p>For the majority of CDs ripping is simple: whipper reads the length
+of the tracks from the CD and computes a disc ID of it. The disc ID is
+found in the MusicBrainz database and whipper uses the attached metadata
+to name the tracks.</p>
+<h2 id="add-disc-id-to-existing-musicbrainz-entry">2. Add disc ID to
+existing MusicBrainz entry</h2>
+<p>For most of the remaining CDs, there is an entry in MusicBrainz, but
+no disc ID is connected to the entry. Then whipper refuses to rip the CD
+and instead provides an URL to submit the disc ID to MusicBrainz. <em>If
+your favourite ripping program does not provide the submit URL, you can
+use the script from the next section to compute it.</em></p>
+<p>Before using the URL you have to create an account and log in the
+MusicBrainz website. Then you can click on the URL and MusicBrainz asks
+you to search the appropriate CD release entry:</p>
+<figure>
+<img src="musicbrainz_lookup_cd.png" alt="MusicBrainz Lookup CD" />
+<figcaption aria-hidden="true">MusicBrainz Lookup CD</figcaption>
+</figure>
+<p>If the CD is from one artist, you can search the artist and choose
+the suitable album release. Compilations with various artists may be
+hard to find. If you do not find a match, continue with the script of
+the next section. It provides more information than the link and
+sometimes this helped me to find a suitable CD release.</p>
+<h2 id="my-script-submit-gnudb-data-to-musicbrainz">3. My script: submit
+gnudb data to MusicBrainz</h2>
+<p>Since gnudb contains 5 times as many disc IDs than MusicBrainz, it is
+likely that the CD is in gnudb. Whipper has no automatic fall back to
+gnudb metadata if MusicBrainz metadata is not available. Therefore I
+wrote a <a
+href="https://github.com/bobbl/sammelsurium/tree/master/seed_mb_from_gnudb/">script</a>
+for it. It can be found in github. When you run the script while the CD
+is in your drive, it computes the disc IDs and queries gnudb for the
+track list. The received data is written to a HTML file. The name of the
+HTML file is <code>seed_FOO.html</code> where FOO is the title of the
+CD. Open the HTML file to check and edit the data:</p>
+<figure>
+<img src="musicbrainz_seed_form.png" alt="MusicBrainz seed form" />
+<figcaption aria-hidden="true">MusicBrainz seed form</figcaption>
+</figure>
+<p>By clicking on <strong>seed</strong> the data is submitted to
+MusicBrainz. After confirming that you really want to add something to
+MusicBrainz you are forwarded to the <strong>Add release</strong> page.
+Now you can complete the metadata for this CD release an add it to
+MusicBrainz. How this works is beyond the scope of this article.</p>
+<h3 id="multiple-cd-sets">Multiple CD sets</h3>
+<p>The script also supports submitting a multi-CD volumes. Put the first
+CD in the drive and start the script with the argument <code>-m</code>.
+After reading the track information, it asks, if another disc should be
+added. Insert the next CD and press enter. After the last CD type
+anything e.g. <code>q</code> and hit enter to leave the script.</p>
+<h3 id="technical-background-of-the-script">Technical background of the
+script</h3>
+<p>The python script uses <a
+href="https://pypi.org/project/discid/">discid</a>, a python wrapper for
+<a href="https://musicbrainz.org/doc/libdiscid">libdiscid</a> from
+MusicBrainz to compute the disc IDs for gnudb and MusicBrainz and the
+submit URL.</p>
+<p>Then it uses <a
+href="https://audiotools.sourceforge.net/programming/audiotools_freedb.html"><code>freedb.py</code>
+from Audio Tools</a> to access gnudb, exracts the track listing and
+generates a HTML file. The <a
+href="https://musicbrainz.org/static/tests/seed-love-bug.html">template
+for the HTML code</a> is provided by the <a
+href="https://wiki.musicbrainz.org/Development/Seeding/Release_Editor">MusicBrainz
+wiki on seeding a new release</a>.</p>
+<h2 id="hard-add-entry-from-scratch">4. Hard: Add entry from
+scratch</h2>
+<p>Sorry, I can’t help. You have to enter everything by hand.</p>
+<h2 id="summary-of-ripping-procedure">Summary of ripping procedure</h2>
+<ul>
+<li>Put CD in disc drive</li>
+<li>Run whipper</li>
+<li>If successfully ripped -&gt; done</li>
+<li>Copy MusicBrainz lookup URL to web browser</li>
+<li>Search on MusicBrainz for artist and release</li>
+<li>If found -&gt; attach disc ID to release and run whipper
+afterwards</li>
+<li>Run <a
+href="https://github.com/bobbl/sammelsurium/tree/master/seed_mb_from_gnudb/"><code>seed_mb_from_gnudb.py</code></a></li>
+<li>If multiple disc set, run with argument <code>-m</code> and change
+CD when prompted</li>
+<li>If not found in gnudb -&gt; enter release by hand</li>
+<li>Open generated HTML file in browser</li>
+<li>Check and modify track listings and submit by clicking on the
+button</li>
+<li>Complete release submission on MusicBrainz website</li>
+<li>Run whipper again</li>
+</ul>
+<p class="lastmodified">2025-05-08</p>
+      </div>
+    </main>
+  </body>
+</html>

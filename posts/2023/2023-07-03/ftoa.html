@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed bobbl.github.io" href="../../../rss.xml" />
+-->
+    <link rel="stylesheet" href="../../../style/blog.css">
+    <title>ftoa: Convert a binary floating point number to a minimal decimal string</title>
+  </head>
+  <body>
+    <header style="background:#fefbd8;">
+      <div class="maxwidth" style="padding: 10pt;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <a style="text-decoration:none; color:black; font-weight:normal; font-size:30pt; font-family:Arial,Helvetica,sans-serif;"
+              href="../../../index.html">
+            bob]<b>bl</b>[og
+          </a>
+          <div>
+            joerg.mische@gmail.com
+          </div>
+          <div>
+            <a href="../../../static/about.html">about</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <br>
+      <div class="maxwidth">
+
+<h1>ftoa: Convert a binary floating point number to a minimal decimal string</h1>
+<p>The minimal decimal representation of a floating point number is as
+short as possible and when converted back to a binary floating point
+number it must be identical to the original number (round-trip
+property).</p>
+<p>Such an unambiguous decimal representation is necessary when
+converting floats from binary to text and back. For example when using
+CSV as intermediate format or when using SQL to write a binary float to
+a database.</p>
+<p>With <code>sprintf("%f")</code> or similar C++ routines the output is
+neither distinct for every floating point number nor minimal. Several
+algorithms were developed over the years:</p>
+<h2 id="history">History</h2>
+<h3 id="dragon4-1990">Dragon4 (1990)</h3>
+<p>Paper: <a
+href="https://lists.nongnu.org/archive/html/gcl-devel/2012-10/pdfkieTlklRzN.pdf">How
+to print floating-point numbers accurately</a> by Guy Steele and Jon
+White.</p>
+<p>Source code can be found in the grisu3 or Errol3 repository.</p>
+<p>First algorithm for a minimal decimal representation. Slow due the
+use of very large integer arithmetics (bignums).</p>
+<h3 id="grisu3-2010">grisu3 (2010)</h3>
+<p>Paper: <a
+href="https://dl.acm.org/doi/abs/10.1145/1806596.1806623">Printing
+Floating-Point Numbers Quickly and Accurately with Integers</a> by
+Florian Loitsch.</p>
+<p>Reference implementation: <a
+href="https://github.com/google/double-conversion"
+class="uri">https://github.com/google/double-conversion</a></p>
+<p>Much faster than Dragon4 due to the use of small fixed length
+integers. However, for 0.5% of the numbers the result is either not
+minimal (grisu2) or the conversion is rejected and Dragon4 must be used
+(grisu3).</p>
+<h3 id="errol3-2016">Errol3 (2016)</h3>
+<p>Paper: <a
+href="https://dl.acm.org/doi/10.1145/2837614.2837654">Printing
+Floating-Point Numbers - An Always Correct Method</a> by Marc Andrysco,
+Ranjit Jhala and Sorin Lerner.</p>
+<p>Reference implementation: <a
+href="https://github.com/marcandrysco/Errol"
+class="uri">https://github.com/marcandrysco/Errol</a></p>
+<p>Uses Knuth’s double-double floating point arithmetics instead of
+fixed length integers. In the first version of the paper the evaluation
+was incorrect and indicated that Errol3 is faster than grisu3. In the
+corrected version it is slower, but always finds the minimal
+representation. In the github repo Errol4 can be found which is even
+faster than grisu3, but Errol4 is not mentioned in the paper.</p>
+<h3 id="ryu-2018">Ryu (2018)</h3>
+<p>Paper: <a
+href="https://dl.acm.org/citation.cfm?doid=3296979.3192369">Ryū: fast
+float-to-string conversion</a> by Ulf Adams.</p>
+<p>Reference implementation: <a href="https://github.com/ulfjack/ryu"
+class="uri">https://github.com/ulfjack/ryu</a></p>
+<p>Faster than the previous algorithms, but requires much larger look-up
+tables.</p>
+<h3 id="schubfach-march-2020">Schubfach (March 2020)</h3>
+<p>Paper: <a
+href="https://drive.google.com/open?id=1luHhyQF9zKlM8yJ1nebU0OgVYhfC6CBN">The
+Schubfach way to render doubles</a> by Raffaello Giulietti.</p>
+<p>Java implementation by the author: <a
+href="https://github.com/c4f7fcce9cb06515/Schubfach/blob/master/todec/src/math/DoubleToDecimal.java"
+class="uri">https://github.com/c4f7fcce9cb06515/Schubfach/blob/master/todec/src/math/DoubleToDecimal.java</a></p>
+<p>C++ Implementation by Drachennest: <a
+href="https://github.com/abolz/Drachennest/blob/master/src/schubfach_64.cc"
+class="uri">https://github.com/abolz/Drachennest/blob/master/src/schubfach_64.cc</a></p>
+<p>Some similarities with Ryu, but faster. Trailing zeros must be
+truncated.</p>
+<h3 id="dragonbox-september-2020">Dragonbox (September 2020)</h3>
+<p><a
+href="https://github.com/jk-jeon/dragonbox/blob/master/other_files/Dragonbox.pdf">Dragonbox:
+A New Floating-Point Binary-to-Decimal Conversion Algorithm</a> by
+Junekey Jeon.</p>
+<p>Reference implementation: <a
+href="https://github.com/jk-jeon/dragonbox"
+class="uri">https://github.com/jk-jeon/dragonbox</a></p>
+<p>Brief implementation by Drachennest: <a
+href="https://github.com/abolz/Drachennest/blob/master/src/dragonbox.cc"
+class="uri">https://github.com/abolz/Drachennest/blob/master/src/dragonbox.cc</a></p>
+<p>Based on Schubfach, some optimizations from grisu are used to reduce
+the number of expensive 128-bit x 64-bit multiplications. As of 2023 the
+fastest algorithm. Both paper and implementation are extensive but hard
+to follow.</p>
+<h2 id="comparison">Comparison</h2>
+<p><a href="https://github.com/abolz/Drachennest"
+class="uri">https://github.com/abolz/Drachennest</a></p>
+<p class="lastmodified">2023-07-03</p>
+      </div>
+    </main>
+  </body>
+</html>

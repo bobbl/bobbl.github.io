@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed bobbl.github.io" href="../../../rss.xml" />
+-->
+    <link rel="stylesheet" href="../../../style/blog.css">
+    <title>Elektronische Rechnung mit dem Latex Paket zugferd erstellen</title>
+  </head>
+  <body>
+    <header style="background:#fefbd8;">
+      <div class="maxwidth" style="padding: 10pt;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <a style="text-decoration:none; color:black; font-weight:normal; font-size:30pt; font-family:Arial,Helvetica,sans-serif;"
+              href="../../../index.html">
+            bob]<b>bl</b>[og
+          </a>
+          <div>
+            joerg.mische@gmail.com
+          </div>
+          <div>
+            <a href="../../../static/about.html">about</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <br>
+      <div class="maxwidth">
+
+<h1>Elektronische Rechnung mit dem Latex Paket zugferd erstellen</h1>
+<h2 id="wie-sieht-eine-elektronische-rechnung-aus">Wie sieht eine
+elektronische Rechnung aus?</h2>
+<p>Durch die <strong>europäische Norm EN 16931</strong> wird der Rahmen
+für elektronische Rechnungen in der EU vorgegeben. Da dort nur grobe
+Anforderungen definiert werden, muss jeder Mitgliedsstaat eine eigene
+konkrete Spezifikation beschließen, die <strong>Core Invoice Usage
+Specification (CIUS)</strong> genannt wird.</p>
+<p>In Deutschland heißt die CIUS <strong>XRechnung</strong> und diese
+Spezifikation ist unter <a
+href="https://xeinkauf.de/dokumente#xrechnung"
+class="uri">https://xeinkauf.de/dokumente#xrechnung</a> frei verfügbar.
+Allerdings wird durch XRechnung nur eine (Baum-)Struktur und die
+unbedingt erforderlichen Felder vorgegeben, keine konkretes
+Dateiformat.</p>
+<p>Gemäß EN 16931-3-1 gibt es zwei Möglichkeiten für das Dateiformat:
+<strong>UBS</strong> und <strong>CII</strong>. Beides sind XML-Formate.
+Die Abbildung der in EN 16931-1 bzw. XRechnung definierten Struktur auf
+konkrete XML-Elemente wird in <em>EN 16931-3-2</em> bzw. <em>EN
+16931-3-3</em>. Leider sind letztere nicht kostenlos zugänglich.</p>
+<p>XML-Dateien in einem der beiden Formate, die die Anforderungen von
+XRechnung erfüllen, sind gültige elektronische Rechnungen. Allerdings
+sind sie für Menschen nur schwer zu lesen. Deshalb gibt es die
+<strong>ZUGFeRD</strong> Spezifikation, die definiert, wie man eine
+XML-Rechnung im CII-Format in eine menschenlesbare PDF-Datei einbettet.
+Das in Frankreich verwendete <strong>Factur-X</strong> ist quasi
+identisch zu ZUGFeRD.</p>
+<h2 id="latex-paket-zugferd">Latex Paket zugferd</h2>
+<p>Mit dem Paket <a href="https://ctan.org/pkg/zugferd">zugferd</a>
+können ZUGFeRD-Rechnungen mit Latex erstellt werden. Da im
+ZUGFeRD-Format eine XRechnung eingebettet wird, kann damit auch eine
+einfache XRechnung in Form einer XML-Datei erzeugt werden.</p>
+<p>Um eine XML-Datei in eine PDF einzubetten und das von ZUGFeRD
+geforderte Format PDF/A-3 zu unterstützen, benötigt zugferd eine nach
+dem 13.09.2024 erstellte Version des Latex-Pakets <a
+href="https://ctan.org/pkg/pdfmanagement-testphase">pdfmanagement-testphase</a>.</p>
+<p>Anfang 2025 sind beide Latex-Paket in vielen Linux- bzw.
+Latex-Distributionen, wie z.B. Ubuntu 24.04 (Noble Numbat) noch nicht
+enthalten. Man kann Latex-Pakete zwar nachinstallieren oder gleich TeX
+Live mit den neuesten Paketen manuell installieren, beides ist aber
+nicht ganz einfach und automatische Updates dadurch nicht mehr möglich.
+Außerdem soll die PDF-Funktionalität bald in den Latex-Kernel integriert
+werden, wodurch die Abhängigkeit wegfiele.</p>
+<p>Deshalb habe ich mich dazu entschlossen, zugferd nicht über das
+Paketmanagement einzubinden, sondern die benötigten Dateien von Hand
+einzubinden.</p>
+<h2 id="zugferd-mit-alter-latex-version-verwenden">zugferd mit alter
+Latex Version verwenden</h2>
+<p>Anstatt die Pakete zugferd und pdfmanagement-testphase einzubinden,
+werden die darin enthaltenen Dateien einfach in das Arbeitsverzeichnis
+kopiert. Man kann die Dateien einer neuere Ubuntu-Version entnehmen. Die
+erste Ubuntu-Version, die zugferd enthält ist eine Vorabversion von
+Ubuntu 25.04 (Plucky Puffin).</p>
+<p>zugferd ist im Ubuntu-Paket <a
+href="https://packages.ubuntu.com/plucky/texlive-latex-extra">texlive-extra</a>
+enthalten. Es besteht aus zwei Dateien:</p>
+<pre><code>texlive-extra-2024.20241115/texmf-dist/tex/latex/zugferd/zugferd.sty
+texlive-extra-2024.20241115/texmf-dist/tex/latex/zugferd/zugferd-invoice.sty</code></pre>
+<p>pdfmanagement-testphase is im Ubuntu-Paket <a
+href="https://packages.ubuntu.com/plucky/texlive-base">texlive-base</a>
+unter dem Pfad
+<code>texlive-base-2024.20241115/texmf-dist/tex/latex/pdfmanagement-testphase</code>
+zu finden. Es enthält deutlich mehr Dateien:</p>
+<pre><code>color-ltx.sty
+colorspace-patches-tmp-ltx.sty
+hgeneric-testphase.def
+hyperref-colorschemes.def
+l3backend-testphase-dvipdfmx.def
+l3backend-testphase-dvips.def
+l3backend-testphase-dvisvgm.def
+l3backend-testphase.lua
+l3backend-testphase-luatex.def
+l3backend-testphase-pdftex.def
+l3backend-testphase-xetex.def
+l3pdffield-testphase.sty
+pdfmanagement-firstaid.sty
+pdfmanagement-testphase.ltx
+pdfmanagement-testphase.sty
+xcolor-patches-tmp-ltx.sty</code></pre>
+<p>Wenn man nur pdfTeX nutzt reichen folgende vier Dateien:</p>
+<pre><code>l3backend-testphase-pdftex.def
+pdfmanagement-testphase.ltx
+pdfmanagement-testphase.sty
+zugferd.sty</code></pre>
+<p>Eventuell muss in zugferd.sty noch die Zeile</p>
+<pre><code>\IfPackageAtLeastF{pdfmanagement-testphase}{2024/09/13}{</code></pre>
+<p>durch</p>
+<pre><code>\IfPackageAtLeastTF{pdfmanagement-testphase}{2024/09/13}{}{</code></pre>
+<p>ersetzt werden.</p>
+<p>Auf GitHub gibt es die <a
+href="https://github.com/bobbl/sammelsurium/tree/master/zugferd-latex">gepatchten
+Dateien</a>.</p>
+<h2 id="eigener-rechnungsstil">Eigener Rechnungsstil</h2>
+<p>Für eigene Rechnungen muss noch eine sty-Datei mit dem eigenen
+Rechnungsstil erstellt werden. Man kann einfach die bei zugferd
+mitgelieferte Datei <a
+href="https://raw.githubusercontent.com/TeXhackse/LaTeX-ZUGFeRD/refs/heads/main/zugferd-invoice.sty">zugferd-invoice.sty</a>
+an die eigenen Bedürfnisse anpassen. Meine <a
+href="https://github.com/bobbl/sammelsurium/tree/master/zugferd-latex">Beispielrechnung</a>
+mit leicht angepasstem Rechnungsstil und allen zugferd-Dateien gibt es
+auf GitHub.</p>
+<h2 id="validatoren">Validatoren</h2>
+<h3 id="xrechnung">XRechnung</h3>
+<ul>
+<li><a
+href="https://erechnungsvalidator.service-bw.de/">E-Rechnungs-Validator
+des Serviceportals Baden-Württemberg</a>: sehr genaue Prüfung</li>
+<li><a href="https://peppol.munich-enterprise.com/xrechnung/"
+class="uri">https://peppol.munich-enterprise.com/xrechnung/</a>:
+zuverlässiger Client-seitiger XRechnungs-Validator</li>
+<li>Das GitHub-Repository der <a
+href="https://github.com/itplr-kosit">Koordinierungsstelle für
+IT-Standards</a> enthält Offline-Validatoren</li>
+</ul>
+<h3 id="zugferd">ZUGFeRD</h3>
+<ul>
+<li><a href="https://erechnungs-validator.de/"
+class="uri">https://erechnungs-validator.de/</a>: ZUGFeRD-Validator</li>
+<li><a href="https://www.portinvoice.com/"
+class="uri">https://www.portinvoice.com/</a>: Prüfung mit mehreren
+Validatoren, bis zu 10 Rechnungen am Tag</li>
+<li>Nach Registrierung können über die <a
+href="https://www.zugferd-community.net/">ZUGFeRD-Community</a> beliebig
+viele Rechnungen bei portinvoice.com geprüft werden</li>
+<li>Links zu weiteren Validatoren: <a
+href="https://easyfirma.net/e-rechnung/zugferd/validatoren"
+class="uri">https://easyfirma.net/e-rechnung/zugferd/validatoren</a></li>
+</ul>
+<h2 id="open-source-projekte">Open-Source-Projekte</h2>
+<ul>
+<li><a href="https://github.com/ZUGFeRD/mustangproject/">Mustang</a>:
+Java Bibliothek und Server</li>
+<li><a
+href="https://jcthiele.github.io/OpenXRechnungToolbox/">OpenXRechnungToolbox</a>:
+Java Applikation zur Offline-Prüfung von XRechnungen</li>
+<li><a
+href="https://github.com/ConnectingEurope/eInvoicing-EN16931">Offizielle
+Validierungsdateien</a></li>
+</ul>
+<p class="lastmodified">2025-01-17</p>
+      </div>
+    </main>
+  </body>
+</html>
