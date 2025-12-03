@@ -57,7 +57,7 @@ Before using the URL you have to create an account and log in the MusicBrainz
 website. Then you can click on the URL and MusicBrainz asks you to search the
 appropriate CD release entry:
 
-![MusicBrainz Lookup CD](/assets/images/musicbrainz_lookup_cd.png)
+![MusicBrainz Lookup CD](musicbrainz_lookup_cd.png)
 
 If the CD is from one artist, you can search the artist and choose the suitable
 album release. Compilations with various artists may be hard to find. If you
@@ -79,7 +79,7 @@ IDs and queries gnudb for the track list. The received data is written to a HTML
 file. The name of the HTML file is `seed_FOO.html` where FOO is the title of
 the CD. Open the HTML file to check and edit the data:
 
-![MusicBrainz seed form](/assets/images/musicbrainz_seed_form.png)
+![MusicBrainz seed form](musicbrainz_seed_form.png)
 
 By clicking on **seed** the data is submitted to MusicBrainz. After confirming that
 you really want to add something to MusicBrainz you are forwarded to the

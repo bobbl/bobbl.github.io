@@ -5,6 +5,8 @@ date:   2024-04-09 00:00:00 +0200
 categories: update
 ---
 
+<div lang="de">
+
 Schließberechtigungen für die elektrische Schließanlage BKS ixalo SE werden
 mit Hilfe des [BKS KeyManagers](https://www.g-u.com/de/DE/produkte/tuertechnik/schliessanlagen/elektronische-schliesssysteme.html)
 verwaltet. Bei der Installation unserer Schließanlage wurde Version 4.4.0007 (06/2017)
@@ -71,7 +73,8 @@ Deshalb muss zunächst das voreingestellte Passwort verwendet werden:
   * Jetzt wird ein Passwort verlangt. Der Benutzer ist wieder `BKS`, diesmal
     muss jedoch das alte Passwort von der alten Installation verwendet werden.
     Auch wieder zweimal.
-  
+
 Damit ist das Update abgeschlossen, alle Daten wurden importiert  und der
 KeyManager kann wie gewohnt verwendet werden.
 
+</div>
