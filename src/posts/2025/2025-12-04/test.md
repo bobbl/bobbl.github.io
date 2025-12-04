@@ -2,6 +2,6 @@
 title:  "Test if github action works"
 ---
 
-2nd try: It worked!
+3rd try: It worked!
 
 
