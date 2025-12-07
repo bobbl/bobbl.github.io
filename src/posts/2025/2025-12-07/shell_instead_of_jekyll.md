@@ -10,9 +10,10 @@ that I am guilty, too. Using [Jekyll](https://jekyllrb.com/) for building my
 little blog implies unnecessary dependencies and waste of computing power.
 A simple shell script and [Pandoc](https://pandoc.org/) for converting the
 markdown should do the job.
-And there are several projects like [bashblog](https://github.com/cfenollosa/bashblog)
-or [bic](https://bic.sh/) that use bash to create static blog websites from
-markdown. However, I thought that configuring them is more work that writing such
+And there are several projects like [Arise](https://ari.se.net/),
+[bashblog](https://github.com/cfenollosa/bashblog) or [bic](https://bic.sh/)
+that use bash to create static blog websites from markdown. However,
+in my opinion configuring them is more work that writing such
 a script from scratch. And I prefer pure POSIX shell scripting over bash
 (the b stands for bloated).
 

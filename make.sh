@@ -9,6 +9,7 @@ help () {
     echo "Actions"
     echo "  build    Recursively convert markdown to .html files, copy other"
     echo "           files and create index of all posts with a date"
+    echo "  serve    Start a static webserver at localhost:8000"
     echo
     echo "Environment variables (with default value)"
     echo "  CONFIG_SRC_PATH=src    directory with source files"
@@ -145,6 +146,12 @@ do
             sort -r  tmp.toc >> tmp.html
             echo "</p>" >> tmp.html
             wrap tmp.html "$CONFIG_TOC" "bob[bl]og"
+            ;;
+
+        serve)
+            cd "$CONFIG_DIST_PATH"
+            python3 -m http.server 8000
+            cd ..
             ;;
 
         clean)
