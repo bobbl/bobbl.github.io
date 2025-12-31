@@ -43,18 +43,9 @@ html {
   }
 }
 
-@media (max-width: 640px) { /* medium screen width */
+@media (max-width: 640px) { /* small screen width */
   html {
     font-size: 12pt;
-  }
-  .maxwidth {
-    padding: 10pt 10pt;
-  }
-}
-
-@media (max-width: 500px) { /* small screens width */
-  html {
-    font-size: 10pt;
   }
   .maxwidth {
     padding: 10pt 10pt;
