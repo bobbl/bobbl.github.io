@@ -161,3 +161,10 @@ blockquote {
   text-align: center;
   font-style: italic;
 }
+
+.toc-date {
+  display: table-cell;
+  hyphens: none;
+  white-space: nowrap;
+  padding-right: 1em;
+}

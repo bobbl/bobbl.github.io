@@ -95,7 +95,7 @@ convert_md () {
     if [ -n $date ]
     then
         echo "<div style='display:table-row'><a href='$rel_html'>" \
-               "<div style='display:table-cell; padding-right:1em'>$date</div>" \
+               "<div class='toc-date'>$date</div>" \
                "<div style='display:table-cell'>$title</div>" \
              "</a></div>" >> tmp.toc
         echo post: $date $title
