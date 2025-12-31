@@ -1,27 +1,68 @@
+@font-face {
+  font-family: "EB Garamond";
+  font-display: swap;
+  font-weight: normal;
+  font-style: normal;
+  /*font-variant-numeric: lining-nums;*/
+  src: local("EB Garamond"),
+    url("EBGaramond-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  font-display: swap;
+  font-weight: normal;
+  font-style: italic;
+  src: local("EB Garamond"),
+    url("EBGaramond-Italic.woff2") format("woff2");
+}
+
+
+
+
 html {
-  font-family: Garamond, serif;
-  font-size: 12pt;
+  font-family: "EB Garamond", serif;
+  font-size: 16pt;
   background: white;
   padding-bottom: 3em;
-}
-
-@media (max-width: 700px) { /* medium screen width */
-  html {
-    font-size: 10pt;
-  }
-}
-
-@media (max-width: 500px) { /* small screens width */
-  html {
-    font-size: 9pt;
-  }
 }
 
 .maxwidth {
   margin: 0 auto;
   padding: 20pt 32pt;
   background: #fefbd8; 
-  max-width: 900px;  /* maximum desktop width */
+  max-width: 800px;     /* maximum desktop width */
+}
+
+@media (max-width: 770px) { /* medium screen width */
+  html {
+    font-size: 14pt;
+  }
+  .maxwidth {
+    padding: 16pt 20pt;
+  }
+}
+
+@media (max-width: 640px) { /* medium screen width */
+  html {
+    font-size: 12pt;
+  }
+  .maxwidth {
+    padding: 10pt 10pt;
+  }
+}
+
+@media (max-width: 500px) { /* small screens width */
+  html {
+    font-size: 10pt;
+  }
+  .maxwidth {
+    padding: 10pt 10pt;
+  }
+}
+
+body {
+  margin: 0;
 }
 
 img, audio, video { max-width: 100% }
@@ -36,9 +77,26 @@ hr {
 
 h1, h2, h3, h4, h5 {
   font-family:Arial,Helvetica,sans-serif;
-  margin-top: 32pt;
   border-bottom: solid 1pt black;
 }
+
+h1 {
+  font-size: 1.5em;
+  margin-top: 32pt;
+}
+
+h2 {
+  font-size: 1.2em;
+}
+
+h3 {
+  font-size: 1.1em;
+}
+
+h4 {
+  font-size: 1em;
+}
+
 
 a[href^=posts] { /* in table of contents */
   color: black;
@@ -78,6 +136,7 @@ pre {
 
 code {
   font-family: Dejavu Sans Mono, monospace;
+  font-size: 0.7em; /* scale Dejavu down compared to EB Garamond */
   background-color: #fffff0;
 }
 

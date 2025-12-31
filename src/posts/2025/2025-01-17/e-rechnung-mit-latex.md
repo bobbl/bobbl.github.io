@@ -16,9 +16,9 @@ jeder Mitgliedsstaat eine eigene konkrete Spezifikation beschließen, die
 **Core Invoice Usage Specification (CIUS)** genannt wird.
 
 In Deutschland heißt die CIUS **XRechnung** und diese Spezifikation ist unter
-<https://xeinkauf.de/dokumente#xrechnung> frei verfügbar. Allerdings wird durch
-XRechnung nur eine (Baum-)Struktur und die unbedingt erforderlichen Felder
-vorgegeben, keine konkretes Dateiformat.
+<https://xeinkauf.de/dokumente#xrechnung> frei verfügbar. Allerdings werden
+durch XRechnung nur eine (Baum-)Struktur und die unbedingt erforderlichen Felder
+vorgegeben, kein konkretes Dateiformat.
 
 Gemäß EN 16931-3-1 gibt es zwei Möglichkeiten für das Dateiformat: **UBS** und 
 **CII**. Beides sind XML-Formate. Die Abbildung der in EN 16931-1 bzw. XRechnung

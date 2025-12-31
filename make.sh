@@ -94,7 +94,10 @@ convert_md () {
     # add to table of contents only if a date was found
     if [ -n $date ]
     then
-        echo "<a href='$rel_html'>$date&nbsp;&nbsp;$title</a><br>" >> tmp.toc
+        echo "<div style='display:table-row'><a href='$rel_html'>" \
+               "<div style='display:table-cell; padding-right:1em'>$date</div>" \
+               "<div style='display:table-cell'>$title</div>" \
+             "</a></div>" >> tmp.toc
         echo post: $date $title
     fi
 
@@ -142,9 +145,9 @@ do
             recurse_subdir "$CONFIG_SRC_PATH"
 
             # create index.html as table of contents
-            echo "<h1>Articles</h1><p>" > tmp.html
+            echo "<h1>Articles</h1><div style='display:table'>" > tmp.html
             sort -r  tmp.toc >> tmp.html
-            echo "</p>" >> tmp.html
+            echo "</div>" >> tmp.html
             wrap tmp.html "$CONFIG_TOC" "bob[bl]og"
             ;;
 
