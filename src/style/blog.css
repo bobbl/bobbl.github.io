@@ -54,6 +54,7 @@ html {
 
 body {
   margin: 0;
+  font-weight: bold;
 }
 
 img, audio, video { max-width: 100% }
@@ -92,7 +93,7 @@ h4 {
 a[href^=posts] { /* in table of contents */
   color: black;
   text-decoration: none;
-  font-weight: normal;
+  font-weight: bold;
 }
 
 a[href^=posts]:visited { /* in table of contents */
@@ -102,7 +103,8 @@ a[href^=posts]:visited { /* in table of contents */
 
 a {
   color: blue; /* leave links blue, even if they have been visited */
-  font-weight: bold;
+  text-decoration: none;
+  font-weight: normal;
 }
 
 
@@ -117,6 +119,7 @@ img {
 */
 
 pre {
+  font-weight: normal;
   background-color: #fffff0;
   border-radius: 8pt;
   padding-left: 8pt;
@@ -128,6 +131,7 @@ pre {
 code {
   font-family: Dejavu Sans Mono, monospace;
   font-size: 0.7em; /* scale Dejavu down compared to EB Garamond */
+  font-weight: normal;
   background-color: #fffff0;
 }
 
