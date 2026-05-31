@@ -118,7 +118,8 @@ img {
 }
 */
 
-pre {
+pre { /* always contains code */
+  font-size: 0.8em; /* will be combined with 0.8em from code => 0.64em */
   font-weight: normal;
   background-color: #fffff0;
   border-radius: 8pt;
@@ -130,7 +131,7 @@ pre {
 
 code {
   font-family: Dejavu Sans Mono, monospace;
-  font-size: 0.7em; /* scale Dejavu down compared to EB Garamond */
+  font-size: 0.8em; /* scale Dejavu down compared to EB Garamond */
   font-weight: normal;
   background-color: #fffff0;
 }

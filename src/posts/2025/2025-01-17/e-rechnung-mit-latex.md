@@ -20,7 +20,7 @@ In Deutschland heißt die CIUS **XRechnung** und diese Spezifikation ist unter
 durch XRechnung nur eine (Baum-)Struktur und die unbedingt erforderlichen Felder
 vorgegeben, kein konkretes Dateiformat.
 
-Gemäß EN 16931-3-1 gibt es zwei Möglichkeiten für das Dateiformat: **UBS** und 
+Gemäß EN 16931-3-1 gibt es zwei Möglichkeiten für das Dateiformat: **UBL** und 
 **CII**. Beides sind XML-Formate. Die Abbildung der in EN 16931-1 bzw. XRechnung
 definierten Struktur auf konkrete XML-Elemente wird in *EN 16931-3-2* bzw.
 *EN 16931-3-3*. Leider sind letztere nicht kostenlos zugänglich.
