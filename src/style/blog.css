@@ -1,27 +1,35 @@
+
+/* ET Book font from https://edwardtufte.github.io/et-book/ */
+
 @font-face {
-  font-family: "EB Garamond";
+  font-family: "et-book";
   font-display: swap;
   font-weight: normal;
   font-style: normal;
-  /*font-variant-numeric: lining-nums;*/
-  src: local("EB Garamond"),
-    url("EBGaramond-Regular.woff2") format("woff2");
+  src: url("etbookot-roman-webfont.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: "EB Garamond";
+  font-family: "et-book";
   font-display: swap;
   font-weight: normal;
   font-style: italic;
-  src: local("EB Garamond"),
-    url("EBGaramond-Italic.woff2") format("woff2");
+  src: url("etbookot-italic-webfont.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "et-book";
+  font-display: swap;
+  font-weight: bold;
+  font-style: normal;
+  src: url("etbookot-bold-webfont.woff2") format("woff2");
 }
 
 
 
 
 html {
-  font-family: "EB Garamond", serif;
+  font-family: "et-book", serif;
   font-size: 16pt;
   background: white;
   padding-bottom: 3em;
@@ -54,7 +62,7 @@ html {
 
 body {
   margin: 0;
-  font-weight: bold;
+  /* font-weight: bold;*/
 }
 
 img, audio, video { max-width: 100% }
