@@ -39,10 +39,10 @@ html {
 .maxwidth {
   margin: 0 auto;
   padding: 20pt 32pt;
-  max-width: 800px;     /* maximum desktop width */
+  max-width: 900px;     /* maximum desktop width */
 }
 
-@media (max-width: 770px) { /* medium screen width */
+@media (max-width: 770px) {
   html {
     font-size: 14px;
   }
@@ -51,7 +51,7 @@ html {
   }
 }
 
-@media (max-width: 640px) { /* small screen width */
+@media (max-width: 640px) {
   html {
     font-size: 12px;
   }
@@ -62,9 +62,12 @@ html {
 
 body {
   margin: 0;
+  padding-left: 12.5%;
+  max-width: 1200px; /* necessary? */
 }
 
 img, audio, video { max-width: 100% }
+
 
 h1, h2, h3, h4, h5 {
   font-family:Arial,Helvetica,sans-serif;
@@ -114,6 +117,7 @@ p {
   text-align: justify;
   margin-top: 0.75em;
   margin-bottom: 0.75em;
+  width: 640px;
 }
 
 /*
@@ -121,6 +125,12 @@ img {
   border: none; 
 }
 */
+
+figure {
+  margin-left: 0;
+  margin-right: 0;
+  max-width: 640px;
+}
 
 pre { /* always contains code */
   font-size: 0.9em; /* will be combined with 0.8em from code => 0.675em */
@@ -130,7 +140,10 @@ pre { /* always contains code */
   padding-left: 0.5rem;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
-  overflow: auto; /* show scroll bars if necessary */
+  overflow-x: auto; /* show scroll bars if necessary */
+  min-width: 640px;
+  width: fit-content;
+  /* max-width: 900px */
 }
 
 code {
@@ -149,7 +162,9 @@ p code {
 table {
   width: 100%;
   border-collapse: collapse;
-
+  min-width: 640px;
+  width: fit-content;
+  /* max-width: 900px */
 }
 
 th, tr:nth-of-type(even) {
