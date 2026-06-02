@@ -30,21 +30,21 @@
 
 html {
   font-family: "et-book", serif;
-  font-size: 16pt;
-  background: white;
+  font-size: 20px;
+  background-color: #fffff4;
+  color: #111111;
   padding-bottom: 3em;
 }
 
 .maxwidth {
   margin: 0 auto;
   padding: 20pt 32pt;
-  background: #fefbd8; 
   max-width: 800px;     /* maximum desktop width */
 }
 
 @media (max-width: 770px) { /* medium screen width */
   html {
-    font-size: 14pt;
+    font-size: 14px;
   }
   .maxwidth {
     padding: 16pt 20pt;
@@ -53,7 +53,7 @@ html {
 
 @media (max-width: 640px) { /* small screen width */
   html {
-    font-size: 12pt;
+    font-size: 12px;
   }
   .maxwidth {
     padding: 10pt 10pt;
@@ -62,46 +62,41 @@ html {
 
 body {
   margin: 0;
-  /* font-weight: bold;*/
 }
 
 img, audio, video { max-width: 100% }
 
-/*
-hr {
-  border-top: 0;
-  border-bottom: solid 1pt black;
-  margin-bottom: 3em;
-}
-*/
-
 h1, h2, h3, h4, h5 {
   font-family:Arial,Helvetica,sans-serif;
-  border-bottom: solid 1pt black;
+/*  border-bottom: solid 1pt black;*/
 }
 
 h1 {
-  font-size: 1.5em;
-  margin-top: 32pt;
+  font-size: 1.8rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.25rem;
 }
 
 h2 {
-  font-size: 1.2em;
+  font-size: 1.4rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.25rem;
 }
 
 h3 {
-  font-size: 1.1em;
+  font-size: 1.1rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
 }
 
 h4 {
-  font-size: 1em;
+  font-size: 1rem;
 }
 
 
 a[href^=posts] { /* in table of contents */
   color: black;
   text-decoration: none;
-  font-weight: bold;
 }
 
 a[href^=posts]:visited { /* in table of contents */
@@ -112,12 +107,13 @@ a[href^=posts]:visited { /* in table of contents */
 a {
   color: blue; /* leave links blue, even if they have been visited */
   text-decoration: none;
-  font-weight: normal;
 }
 
 
 p {
   text-align: justify;
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
 }
 
 /*
@@ -127,27 +123,27 @@ img {
 */
 
 pre { /* always contains code */
-  font-size: 0.8em; /* will be combined with 0.8em from code => 0.64em */
+  font-size: 0.9em; /* will be combined with 0.8em from code => 0.675em */
   font-weight: normal;
-  background-color: #fffff0;
-  border-radius: 8pt;
-  padding-left: 8pt;
-  padding-top: 4pt;
-  padding-bottom: 4pt;
+  background-color: #fefbd8;
+  border-radius: 0.5rem;
+  padding-left: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
   overflow: auto; /* show scroll bars if necessary */
 }
 
 code {
   font-family: Dejavu Sans Mono, monospace;
-  font-size: 0.8em; /* scale Dejavu down compared to EB Garamond */
+  font-size: 0.75em; /* scale Dejavu down compared to ET Book */
   font-weight: normal;
-  background-color: #fffff0;
+  background-color: #fefbd8;
 }
 
 p code {
-  border-radius: 4pt;
-  padding-left: 3pt;
-  padding-right: 3pt;
+  border-radius: 0.25rem;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
 }
 
 table {
@@ -175,9 +171,20 @@ blockquote {
   font-style: italic;
 }
 
+.toc-row {
+  display:table-row;
+  width:auto;
+}
+
 .toc-date {
   display: table-cell;
   hyphens: none;
   white-space: nowrap;
   padding-right: 1em;
+  width: 5em; /* without it columns are not aligned */
 }
+
+.toc-title  {
+  display:table-cell;
+}
+
