@@ -145,7 +145,7 @@ do
             recurse_subdir "$CONFIG_SRC_PATH"
 
             # create index.html as table of contents
-            echo "<h1>Articles</h1><div style='display:table;width:auto;'>" > tmp.html
+            echo "<h1>Articles by Jörg Mische</h1><div style='display:table;width:auto;'>" > tmp.html
             sort -r  tmp.toc >> tmp.html
             echo "</div>" >> tmp.html
             wrap tmp.html "$CONFIG_TOC" "bob[bl]og"

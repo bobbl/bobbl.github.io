@@ -27,7 +27,6 @@
 
 
 
-
 html {
   font-family: "et-book", serif;
   font-size: 20px;
@@ -36,34 +35,17 @@ html {
   padding-bottom: 3em;
 }
 
-.maxwidth {
-  margin: 0 auto;
-  padding: 20pt 32pt;
-  max-width: 900px;     /* maximum desktop width */
-}
-
-@media (max-width: 770px) {
-  html {
-    font-size: 14px;
-  }
-  .maxwidth {
-    padding: 16pt 20pt;
-  }
-}
-
-@media (max-width: 640px) {
-  html {
-    font-size: 12px;
-  }
-  .maxwidth {
-    padding: 10pt 10pt;
-  }
-}
-
 body {
-  margin: 0;
   padding-left: 12.5%;
-  max-width: 1200px; /* necessary? */
+  width: 87.5%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+header {
+  font-size: 20px; /* not reactive */
+  width: 660px;
+  background: #fefbd8;
 }
 
 img, audio, video { max-width: 100% }
@@ -96,17 +78,6 @@ h4 {
   font-size: 1rem;
 }
 
-
-a[href^=posts] { /* in table of contents */
-  color: black;
-  text-decoration: none;
-}
-
-a[href^=posts]:visited { /* in table of contents */
-  color: gray;
-}
-
-
 a {
   color: blue; /* leave links blue, even if they have been visited */
   text-decoration: none;
@@ -117,39 +88,32 @@ p {
   text-align: justify;
   margin-top: 0.75em;
   margin-bottom: 0.75em;
-  width: 640px;
+  width: 660px;
 }
-
-/*
-img {
-  border: none; 
-}
-*/
 
 figure {
   margin-left: 0;
   margin-right: 0;
-  max-width: 640px;
+  max-width: 660px;
 }
 
 pre { /* always contains code */
-  font-size: 0.9em; /* will be combined with 0.8em from code => 0.675em */
-  font-weight: normal;
+  font-size: 0.9rem; /* will be combined with 0.75em from code => 0.675em */
   background-color: #fefbd8;
   border-radius: 0.5rem;
-  padding-left: 0.5rem;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
+  padding: 0.25rem 0.5rem 0.25rem 0.5rem;
   overflow-x: auto; /* show scroll bars if necessary */
-  min-width: 640px;
   width: fit-content;
-  /* max-width: 900px */
+  min-width: 660px;
+  box-sizing: border-box; /* I don't understand why, but without it the box is
+    shifted to the right for ca 1em*/
 }
 
 code {
   font-family: Dejavu Sans Mono, monospace;
-  font-size: 0.75em; /* scale Dejavu down compared to ET Book */
-  font-weight: normal;
+  font-size: 0.75em; 
+    /* scale Dejavu down compared to ET Book
+       relative size to make it smaller in <pre> blocks */
   background-color: #fefbd8;
 }
 
@@ -160,11 +124,9 @@ p code {
 }
 
 table {
-  width: 100%;
   border-collapse: collapse;
-  min-width: 640px;
+  min-width: 660px;
   width: fit-content;
-  /* max-width: 900px */
 }
 
 th, tr:nth-of-type(even) {
@@ -186,6 +148,19 @@ blockquote {
   font-style: italic;
 }
 
+
+
+/* table of contents */
+
+a[href^=posts] { /* in table of contents: links are black */
+  color: black;
+  text-decoration: none;
+}
+
+a[href^=posts]:visited { /* in table of contents: visited links are gray */
+  color: gray;
+}
+
 .toc-row {
   display:table-row;
   width:auto;
@@ -203,3 +178,39 @@ blockquote {
   display:table-cell;
 }
 
+
+
+/* responsiveness */
+
+@media (max-width: 770px) {
+  body {
+    width: 88%;
+    padding-left: 6%;
+    padding-right: 6%;
+  }
+
+  header, p, figure, pre, table  {
+    width: 100%;
+  }
+
+  table  {
+    min-width: 100%;
+  }
+
+  pre {
+    min-width: 100%;
+    box-sizing: border-box;
+  }
+
+}
+
+@media (max-width: 600px) {
+  html {
+    font-size: 16px;
+  }
+  body {
+    width: 96%;
+    padding-left: 2%;
+    padding-right: 2%;
+  }
+}
