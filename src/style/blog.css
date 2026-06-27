@@ -91,6 +91,11 @@ p {
   width: 660px;
 }
 
+ul {
+  box-sizing: border-box;
+  width: 660px;
+}
+
 figure {
   margin-left: 0;
   margin-right: 0;
@@ -189,7 +194,7 @@ a[href^=posts]:visited { /* in table of contents: visited links are gray */
     padding-right: 6%;
   }
 
-  header, p, figure, pre, table  {
+  header, p, ul, figure, pre, table  {
     width: 100%;
   }
 

@@ -132,6 +132,7 @@ mit leicht angepasstem Rechnungsstil und allen zugferd-Dateien gibt es auf GitHu
 
 Validatoren
 -----------
+*bearbeitet am 2026-06-27*
 
 ### XRechnung
 
@@ -142,12 +143,16 @@ Validatoren
     enthält Offline-Validatoren
 
 ### ZUGFeRD
-
-  * <https://erechnungs-validator.de/>: ZUGFeRD-Validator
-  * <https://www.portinvoice.com/>: Prüfung mit mehreren Validatoren, bis zu 10 Rechnungen am Tag
-  * Nach Registrierung können über die [ZUGFeRD-Community](https://www.zugferd-community.net/)
-    beliebig viele Rechnungen bei portinvoice.com geprüft werden
-  * Links zu weiteren Validatoren: <https://easyfirma.net/e-rechnung/zugferd/validatoren>
+  * <https://erechnungs-validator.de/><br>
+    kostenloser ZUGFeRD-Validator
+  * <https://www.eu-rechnung.de/e-rechnung-validieren/><br>
+    sehr genaue Prüfung
+  * <https://www.e-rechnungs-checker.de/><br>
+    warnt zusätzlich, wenn XRechnung nicht mit PDF-Text übereinstimmt
+  * <https://www.portinvoice.com/><br>
+    von der ZUGFeRD-Community empfohlen, aber begrenzt auf 10 Rechnungen am Tag
+  * Links zu weiteren Validatoren:<br>
+    <https://easyfirma.net/e-rechnung/zugferd/validatoren>
 
 
 
